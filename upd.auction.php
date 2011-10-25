@@ -28,6 +28,45 @@ class Auction_upd {
 		);
 		$this->EE->db->insert('modules', $mod_data);
 		
+		$this->EE->load->dbforge();
+		
+		$fields = array(
+			'id' => array(
+				'type' => 'int',
+				'constraint' => '10',
+				'unsigned' => TRUE,
+				'auto_increment'=> TRUE
+			),
+			'entry_id' => array(
+				'type' => 'int',
+				'constraint' => '10',
+				'unsigned' => TRUE,
+				'null' => FALSE
+			),
+			'member_id' => array(
+				'type' => 'int',
+				'constraint' => '10',
+				'unsigned' => TRUE,
+				'null' => FALSE
+			),
+			'bid_amount' => array(
+				'type' => 'decimal',
+				'constraint' => '7,2',
+				'default' => '0.00',
+				'null' => FALSE
+			),
+			'bid_date' => array(
+				'type' => 'int',
+				'constraint' => '10',
+				'unsigned' => TRUE,
+				'default' => '0',
+				'null' => FALSE
+			)
+		);
+		$this->EE->dbforge->add_field($fields);
+		$this->EE->dbforge->add_key('id', TRUE);
+		$this->EE->dbforge->create_table('auction');
+		
 		return TRUE;
 	}
 	
@@ -54,6 +93,9 @@ class Auction_upd {
 		
 		$this->EE->db->where('class', $this->module_name.'_mcp');
 		$this->EE->db->delete('actions');
+		
+		$this->EE->load->dbforge();
+		$this->EE->dbforge->drop_table('auction');
 		
 		return TRUE;
 	}
